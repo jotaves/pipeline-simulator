@@ -1,40 +1,50 @@
 #include <string>
 #include <iostream>
 #include <vector>
+#include <cctype>
 
 #ifndef INSTRUCAO_H
 #define INSTRUCAO_H
 
 class Instrucao {
 private:
+	std::string linhaCompleta;
 	std::string nome;
 	std::string destino;
+	std::string destinoSecundario;
 	std::string fonte1;
 	std::string fonte2;
-	std::string linhaCompleta;
-	//bool instrucaoValida;
+	std::string label;
+	std::string valor;
+	bool linhaValida;
+	bool labelOuNao;
 
-	void separarString();
+	void separarEValidarString();
 
 public:
+	Instrucao ();
 
 	Instrucao (std::string linhaCompleta);
 
-	std::string getNome();
+	std::string getLinhaCompleta();
 
-	void setNome(std::string nome);
+	std::string getNome();
 
 	std::string getDestino();
 
-	void setDestino(std::string destino);
+	std::string getDestinoSecundario();
 
 	std::string getFonte1();
 
-	void setFonte1(std::string fonte1);
-
 	std::string getFonte2();
 
-	void setFonte2(std::string fonte2);
+	std::string getLabel();
+
+	std::string getValor();
+
+	bool isValida();
+
+	bool isLabel();
 };
 
 #endif

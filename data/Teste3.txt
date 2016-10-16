@@ -1,0 +1,6 @@
+add $s0, $t1, $t2
+sub $t0, $t4, $t5
+sub $t0, $t0, $t5
+sub $t0, $t0, $t0
+add $t0, $t1, $t2
+add $t0, $s0, $t1
