@@ -23,214 +23,79 @@ void Pipeline::gerarPipeline() {
 	numeroDeCiclos = 0;
 	estagios.assign(5, null);
 
-for (unsigned int i = 0; i < instrucoes.size();) {
-	//std::cout << "\ni = " << i << "\n";
-		for(unsigned int j = 0; j < 1; j++) {
-			// Se a "instrução" for uma label, pula.
-			//std::cout << instrucoes[i].isLabel() << "\n";
-			if (instrucoes[i].isLabel()) {
-				i++;
-				continue;
-			}
-
-			//std::cout << "\nj = " << j << "\n";
-			if (i == 0 and j == 0) {
-				//std::cout << "Primeira instrução!\n";
-				//numeroDeCiclos++;
-				filaDestinos.push_back(instrucoes[i]);
-				if (filaDestinos.size() > 4) filaDestinos.pop_front();
-				estagios.push_back(instrucoes[i++]);
-				estagios.pop_front();
-				numeroDeCiclos++;
-				print();
-				if (!(i < instrucoes.size())) break;
-				continue;
-			}
-
-			// Como foi pulado um label, ela também não pode ser comparada com um elemento atual.
-			int n;
-			if (instrucoes[i-1].isLabel()) n = i-2;
-			else n = i-1;
-
-			if (hasConflito(instrucoes[i])) {
-				if (j == 0) {
-					//std::cout << "Instrução com conflito e no tempo 0.\n";
-					numeroDeCiclos++;
-					//std::cout << "\n" << instrucoes[i-1].getLinhaCompleta() << "\n";
-					//std::cout << estagios[1].getLinhaCompleta() << "\n\n";
-					if (instrucoes[n].getLinhaCompleta() == estagios[1].getLinhaCompleta()) {
-					//	std::cout << "Teste\n";
-						filaDestinos.push_back(instrucoes[i]); //if fila > 4
-						if (filaDestinos.size() > 4) filaDestinos.pop_front();
-						estagios.push_back(instrucoes[i++]);
-						estagios.pop_front();
-						print();
-						if (!(i < instrucoes.size())) break;
-						continue;
-					}
-						estagios.push_back(null);
-						estagios.pop_front();
-						print();
-						if (!(i < instrucoes.size())) break;
-						continue;
-				}
-				if (j == 1) {
-					//std::cout << "Instrução com conflito e no tempo 1.\n";
-					numeroDeCiclos++;
-					//std::cout << "\n" << instrucoes[i-1].getLinhaCompleta() << "\n";
-					//std::cout << estagios[1].getLinhaCompleta() << "\n\n";
-					if (instrucoes[n].getLinhaCompleta() == estagios[1].getLinhaCompleta()) {
-						//std::cout << "Teste\n";
-						filaDestinos.push_back(instrucoes[i]); //if fila > 4
-						if (filaDestinos.size() > 4) filaDestinos.pop_front();
-						estagios.push_back(instrucoes[i++]);
-						estagios.pop_front();
-						print();
-						if (!(i < instrucoes.size())) break;
-						continue;
-					}
-						estagios.push_back(null);
-						estagios.pop_front();
-						print();
-						if (!(i < instrucoes.size())) break;
-						continue;
-				}
-				if (j == 2) {
-					//std::cout << "Instrução com conflito e no tempo 2.\n";
-					numeroDeCiclos++;
-					//std::cout << "\n" << instrucoes[i-1].getLinhaCompleta() << "\n";
-					//std::cout << estagios[1].getLinhaCompleta() << "\n\n";
-					if (instrucoes[n].getLinhaCompleta() == estagios[1].getLinhaCompleta()) {
-						//std::cout << "Teste\n";
-						filaDestinos.push_back(instrucoes[i]); //if fila > 4
-						if (filaDestinos.size() > 4) filaDestinos.pop_front();
-						estagios.push_back(instrucoes[i++]);
-						estagios.pop_front();
-						print();
-						if (!(i < instrucoes.size())) break;
-						continue;						
-					}
-						estagios.push_back(null);
-						estagios.pop_front();
-						print();
-						if (!(i < instrucoes.size())) break;
-						continue;			
-				}
-				if (j == 3) {
-					//std::cout << "Instrução com conflito e no tempo 3.\n";
-					numeroDeCiclos++;
-					//std::cout << "\n" << instrucoes[i-1].getLinhaCompleta() << "\n";
-					//std::cout << estagios[1].getLinhaCompleta() << "\n\n";
-					if (instrucoes[n].getLinhaCompleta() == estagios[1].getLinhaCompleta()) {
-						//std::cout << "Teste\n";
-						filaDestinos.push_back(instrucoes[i]); //if fila > 4
-						if (filaDestinos.size() > 4) filaDestinos.pop_front();
-						estagios.push_back(instrucoes[i++]);
-						estagios.pop_front();
-						print();
-						if (!(i < instrucoes.size())) break;
-						continue;						
-					}
-						estagios.push_back(null);
-						estagios.pop_front();
-						print();
-						if (!(i < instrucoes.size())) break;
-						continue;
-				}
-
-				if (j == 4) {
-					//std::cout << "Instrução com conflito e no tempo 4.\n";
-					numeroDeCiclos++;
-					//std::cout << "\n" << instrucoes[i-1].getLinhaCompleta() << "\n";
-					//std::cout << estagios[1].getLinhaCompleta() << "\n\n";
-					if (instrucoes[n].getLinhaCompleta() == estagios[1].getLinhaCompleta()) {
-						//std::cout << "Teste\n";
-						filaDestinos.push_back(instrucoes[i]); //if fila > 4
-						if (filaDestinos.size() > 4) filaDestinos.pop_front();
-						estagios.push_back(instrucoes[i++]);
-						estagios.pop_front();
-						print();
-						if (!(i < instrucoes.size())) break;
-						continue;						
-					}
-						estagios.push_back(null);
-						estagios.pop_front();
-						print();
-						if (!(i < instrucoes.size())) break;
-						continue;
-				}
-			} 
-
-			if (j == 0) {
-				//std::cout << "Instrução sem conflito no tempo 0!\n";
-				filaDestinos.push_back(instrucoes[i]); //if fila > 4
-				if (filaDestinos.size() > 4) filaDestinos.pop_front();
-				estagios.push_back(instrucoes[i++]);
-				estagios.pop_front();
-				numeroDeCiclos++;
-				print();
-				if (!(i < instrucoes.size())) break;
-				continue;
-			}
-			if (j == 1) {
-				//std::cout << "Instrução sem conflito no tempo 0!\n";
-				filaDestinos.push_back(instrucoes[i]); //if fila > 4
-				if (filaDestinos.size() > 4) filaDestinos.pop_front();
-				estagios.push_back(instrucoes[i++]);
-				estagios.pop_front();
-				numeroDeCiclos++;
-				print();
-				if (!(i < instrucoes.size())) break;
-				continue;
-			}
-			if (j == 2) {
-				//std::cout << "Instrução sem conflito no tempo 0!\n";
-				filaDestinos.push_back(instrucoes[i]); //if fila > 4
-				if (filaDestinos.size() > 4) filaDestinos.pop_front();
-				estagios.push_back(instrucoes[i++]);
-				estagios.pop_front();
-				numeroDeCiclos++;
-				print();
-				if (!(i < instrucoes.size())) break;
-				continue;
-			}
-			if (j == 3) {
-				//std::cout << "Instrução sem conflito no tempo 0!\n";
-				filaDestinos.push_back(instrucoes[i]); //if fila > 4
-				if (filaDestinos.size() > 4) filaDestinos.pop_front();
-				estagios.push_back(instrucoes[i++]);
-				estagios.pop_front();
-				numeroDeCiclos++;
-				print();
-				if (!(i < instrucoes.size())) break;
-				continue;
-			}
-			if (j == 4) {
-				//std::cout << "Instrução sem conflito no tempo 0!\n";
-				filaDestinos.push_back(instrucoes[i]); //if fila > 4
-				if (filaDestinos.size() > 4) filaDestinos.pop_front();
-				estagios.push_back(instrucoes[i++]);
-				estagios.pop_front();
-				numeroDeCiclos++;
-				print();
-				if (!(i < instrucoes.size())) break;
-				continue;
-			}
+	for (unsigned int i = 0; i < instrucoes.size();) {
+		//std::cout << "\ni = " << i << "\n";
+		// Se a "instrução" for uma label, pula.
+		//std::cout << instrucoes[i].isLabel() << "\n";
+		if (instrucoes[i].isLabel()) {
+			i++;
+			continue;
 		}
-	}
-	// Finalizando os ciclos.
-		for (unsigned int i; ; i++) {
-			estagios.push_back(null);
+
+		//std::cout << "\nj = " << j << "\n";
+		if (i == 0) {
+			//std::cout << "Primeira instrução!\n";
+			//numeroDeCiclos++;
+			filaDestinos.push_back(instrucoes[i]);
+			if (filaDestinos.size() > 4) filaDestinos.pop_front();
+			estagios.push_back(instrucoes[i++]);
 			estagios.pop_front();
-			if (estagios[4].getLinhaCompleta() == "null" 
-				and estagios[3].getLinhaCompleta() == "null"
-				and estagios[2].getLinhaCompleta() == "null"
-				and estagios[1].getLinhaCompleta() == "null"
-				and estagios[0].getLinhaCompleta() == "null")
-					break;
 			numeroDeCiclos++;
 			print();
+			if (!(i < instrucoes.size())) break;
+			continue;
 		}
+
+		// Como foi pulado um label, ela também não pode ser comparada com um elemento atual.
+		int n;
+		if (instrucoes[i-1].isLabel()) n = i-2;
+		else n = i-1;
+
+		if (hasConflito(instrucoes[i])) {
+			//std::cout << "Instrução com conflito e no tempo 0.\n";
+			numeroDeCiclos++;
+			//std::cout << "\n" << instrucoes[i-1].getLinhaCompleta() << "\n";
+			//std::cout << estagios[1].getLinhaCompleta() << "\n\n";
+			if (instrucoes[n].getLinhaCompleta() == estagios[1].getLinhaCompleta()) {
+			//	std::cout << "Teste\n";
+				filaDestinos.push_back(instrucoes[i]); //if fila > 4
+				if (filaDestinos.size() > 4) filaDestinos.pop_front();
+				estagios.push_back(instrucoes[i++]);
+				estagios.pop_front();
+				print();
+				if (!(i < instrucoes.size())) break;
+				continue;
+			}
+				estagios.push_back(null);
+				estagios.pop_front();
+				print();
+				if (!(i < instrucoes.size())) break;
+				continue;
+		} 
+		// Instrução sem conflito
+		//std::cout << "Instrução sem conflito no tempo 0!\n";
+		filaDestinos.push_back(instrucoes[i]); //if fila > 4
+		if (filaDestinos.size() > 4) filaDestinos.pop_front();
+		estagios.push_back(instrucoes[i++]);
+		estagios.pop_front();
+		numeroDeCiclos++;
+		print();
+		if (!(i < instrucoes.size())) break;
+		continue;	
+		}
+		// Finalizando os ciclos restaram.
+		for (unsigned int i; ; i++) {
+		estagios.push_back(null);
+		estagios.pop_front();
+		if (estagios[4].getLinhaCompleta() == "null" 
+			and estagios[3].getLinhaCompleta() == "null"
+			and estagios[2].getLinhaCompleta() == "null"
+			and estagios[1].getLinhaCompleta() == "null"
+			and estagios[0].getLinhaCompleta() == "null")
+				break;
+		numeroDeCiclos++;
+		print();
+	}
 }
 
 bool Pipeline::hasConflito(Instrucao instrucao) {
