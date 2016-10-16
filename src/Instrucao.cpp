@@ -141,6 +141,7 @@ void Instrucao::separarEValidarString() {
 			this->nome = v[0];
 			this->destino = "$v0";
 			this->fonte1 = "$v0";
+			this->fonte2 = "$a0";
 			this->linhaValida = true;
 		}
 	}

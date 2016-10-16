@@ -1,5 +1,6 @@
 #include <vector>
 #include <queue>
+#include <cstring>
 #include "Instrucao.h"
 
 #ifndef PIPELINE_H

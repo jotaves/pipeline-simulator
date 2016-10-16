@@ -22,6 +22,8 @@ void Pipeline::gerarPipeline() {
 	Instrucao null;
 	numeroDeCiclos = 0;
 	estagios.assign(5, null);
+	bool wasJump = false;
+	unsigned int nextAfterJump;
 
 	for (unsigned int i = 0; i < instrucoes.size(); ) {
 		//std::cout << "\ni = " << i << "\n";
@@ -31,6 +33,24 @@ void Pipeline::gerarPipeline() {
 		if (instrucoes[i].isLabel()) {
 			i++;
 			continue;
+		}
+
+		if (instrucoes[i].getNome() == "beq" or 
+			instrucoes[i].getNome() == "bne" or
+			instrucoes[i].getNome() == "j") {
+
+			unsigned int j = i;
+			nextAfterJump = i;
+
+			while (instrucoes[j].getLabel().compare (instrucoes[nextAfterJump].getNome()) != 0) {
+				//std::cout << instrucoes[nextAfterJump].getNome() << "\n";
+				//std::cout << instrucoes[j].getLabel().compare (instrucoes[nextAfterJump].getNome()) << "\n";
+				nextAfterJump++;
+			}
+			wasJump = true;
+			//std::cout << k+1 << "\n";
+			//std::cout << instrucoes[k].getLinhaCompleta() << "\n";
+			//std::cout << instrucoes[j].getLabel().compare (instrucoes[k].getNome()) << "\n";
 		}
 
 		//std::cout << "\nj = " << j << "\n";
@@ -47,7 +67,10 @@ void Pipeline::gerarPipeline() {
 			estagios.pop_front();
 			numeroDeCiclos++;
 			print();
-			
+			if (wasJump) {
+				i = nextAfterJump;
+				wasJump = false;
+			}
 			continue;
 		}
 
@@ -80,6 +103,10 @@ void Pipeline::gerarPipeline() {
 				estagios.push_back(instrucoes[i++]);
 				estagios.pop_front();
 				print();
+				if (wasJump) {
+					i = nextAfterJump;
+					wasJump = false;
+				}
 				continue;
 			}
 
@@ -104,6 +131,10 @@ void Pipeline::gerarPipeline() {
 		estagios.pop_front();
 		numeroDeCiclos++;
 		print();
+		if (wasJump) {
+			i = nextAfterJump;
+			wasJump = false;
+		}
 		continue;
 	}
 
@@ -128,11 +159,30 @@ void Pipeline::gerarPipeline() {
 
 bool Pipeline::hasConflito(Instrucao instrucao) {
 	for (unsigned int k = 0; k < filaDestinos.size(); k++){
-		if (instrucao.getFonte1() == filaDestinos.at(k).getDestino())
-			return true;
-		if (instrucao.getFonte2() == filaDestinos.at(k).getDestino())
-			return true;
-	}
+			//Comparando destino (se não for null)
+			if(filaDestinos.at(k).getDestino() != "null"){
+				if (instrucao.getFonte1() == filaDestinos.at(k).getDestino()){
+									return true;
+				}
+				
+				if (instrucao.getFonte2() != "null") {
+					if (instrucao.getFonte2() == filaDestinos.at(k).getDestino())
+						return true;
+				}
+			}
+			//Comparando destino secundário (se não for null)
+			if(filaDestinos.at(k).getDestinoSecundario() != "null") {
+				if (instrucao.getFonte1() == filaDestinos.at(k).getDestinoSecundario()) {
+					return true;
+				}
+
+				if (instrucao.getFonte2() != "null") {
+					if (instrucao.getFonte2() == filaDestinos.at(k).getDestinoSecundario()) {
+						return true;
+					}
+				}
+			}
+		}
 	return false;
 }
 
