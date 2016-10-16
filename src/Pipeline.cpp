@@ -26,9 +26,19 @@ void Pipeline::gerarPipeline() {
 	unsigned int nextAfterJump;
 
 	for (unsigned int i = 0; i < instrucoes.size(); ) {
+
+		//Conflito caso lw esteja no MEM e algo seja inserido no IF, usando 1 memória.
+		if(estagios[2].getNome() == "lw") {
+			// não insere elementos
+			estagios.push_back(null);
+			estagios.pop_front();
+			numeroDeCiclos++;
+			print();
+			continue;
+		}
+
 		//std::cout << "\ni = " << i << "\n";
 		//std::cout << instrucoes[i].isLabel() << "\n";
-
 		//Se a "instrução" for uma label, pula.
 		if (instrucoes[i].isLabel()) {
 			i++;
@@ -127,6 +137,7 @@ void Pipeline::gerarPipeline() {
 		}
 		
 		// O elemento é inserido imediatamente ao pipeline.
+
 		estagios.push_back(instrucoes[i++]);
 		estagios.pop_front();
 		numeroDeCiclos++;
@@ -142,7 +153,7 @@ void Pipeline::gerarPipeline() {
 	for (unsigned int i; ; i++) {
 		estagios.push_back(null);
 		estagios.pop_front();
-
+		std::cout << estagios.size() << std::endl;
 		//Só para quando todas as linhas forem vazias.
 		if (estagios[4].getLinhaCompleta() == "null" and 
 			estagios[3].getLinhaCompleta() == "null" and 
