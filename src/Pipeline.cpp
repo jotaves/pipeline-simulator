@@ -52,10 +52,16 @@ void Pipeline::gerarPipeline() {
 			unsigned int j = i;
 			nextAfterJump = i;
 
-			while (instrucoes[j].getLabel().compare (instrucoes[nextAfterJump].getNome()) != 0) {
+			while (nextAfterJump < instrucoes.size() and instrucoes[j].getLabel().compare (instrucoes[nextAfterJump].getNome()) != 0) {
 				//std::cout << instrucoes[nextAfterJump].getNome() << "\n";
 				//std::cout << instrucoes[j].getLabel().compare (instrucoes[nextAfterJump].getNome()) << "\n";
 				nextAfterJump++;
+				std::cout << instrucoes[nextAfterJump].getNome();
+			}
+
+			if (nextAfterJump == instrucoes.size()) {
+				std::cout << "Há um jump no código cujo label não foi encontrada!\n";
+				break;
 			}
 			wasJump = true;
 			//std::cout << k+1 << "\n";
@@ -67,13 +73,13 @@ void Pipeline::gerarPipeline() {
 		//Primeira instrução.
 		if (i == 0) {
 			//std::cout << "Primeira instrução!\n";
-			filaDestinos.push_back(instrucoes[i]);
+			
+			estagios.push_back(instrucoes[i]);
+			filaDestinos.push_back(instrucoes[i++]);
 			
 			if (filaDestinos.size() > 4) {
 				filaDestinos.pop_front();
-			}
-			
-			estagios.push_back(instrucoes[i++]);
+			}			
 			estagios.pop_front();
 			numeroDeCiclos++;
 			print();
@@ -94,23 +100,43 @@ void Pipeline::gerarPipeline() {
 			n = i-1;
 		}
 
-		//Se o elemento a ser inserido tiver conflito com o atual.
-		if (hasConflito(instrucoes[i])) {
+		//Procura se há conflito e passa o retorno pra uma instrução auxiliar.
+		Instrucao conflitante = hasConflito(instrucoes[i]);
+		
+		//Se o elemento a ser inserido tiver conflito com o atual, retornará o conflito (e o nome será diferente de "null").
+		if (conflitante.getNome() != "null") {	
+			std::cout << "\n" << conflitante.getLinhaCompleta() << "\n";
+			std::cout << estagios[1].getLinhaCompleta() << "\n";
+			std::cout << estagios[0].getLinhaCompleta() << "\n";
 			//std::cout << "Instrução com conflito e no tempo 0.\n";
 			numeroDeCiclos++;
 			//std::cout << "\n" << instrucoes[i-1].getLinhaCompleta() << "\n";
 			//std::cout << estagios[1].getLinhaCompleta() << "\n\n";
 			
-			//Se o elemento anterior ao que será inserido estiver no último estágio do pipeline, é inserido o atual.
-			if (instrucoes[n].getLinhaCompleta() == estagios[1].getLinhaCompleta()) {
+			//Se o elemento conflitante estiver na fase "EX" do pipeline. O novo será inserido.
+			//Por causa de peculiaridades do código, é conferido o elemento 1 do deque, pois o elemento inserido agora só aparecerá na próxima impressão.
+			//E caso o elemento conflitante não esteja no índice 1 do deque, é conferido o elemento 0.
+			//Pois pode ser que tenha acontecido de um lw estar no estagios[2] e o código tenha pulado um índice, sendo assim, o elemento conflitante ficando no estagios[0].
+			//Também é conferido se o elemento conflitante não está nos elementos 4, 3, e 2 do deque, pois pode ser que haja instruções iguais repetidas. Ou seja, não é a hora de inserir uma instrução com conflito.
+			//Também é conferido se o elemento conflitante não está mais no pipeline.
+			if (((instrucoes[n].getLinhaCompleta() == estagios[1].getLinhaCompleta() 
+				or conflitante.getLinhaCompleta() == estagios[0].getLinhaCompleta()) 
+				and conflitante.getLinhaCompleta() != estagios[4].getLinhaCompleta() 
+				and conflitante.getLinhaCompleta() != estagios[3].getLinhaCompleta() 
+				and conflitante.getLinhaCompleta() != estagios[2].getLinhaCompleta()) or 
+
+				(conflitante.getLinhaCompleta() != estagios[4].getLinhaCompleta() and
+				conflitante.getLinhaCompleta() != estagios[3].getLinhaCompleta() and
+				conflitante.getLinhaCompleta() != estagios[2].getLinhaCompleta() and 
+				conflitante.getLinhaCompleta() != estagios[1].getLinhaCompleta() and
+				conflitante.getLinhaCompleta() != estagios[0].getLinhaCompleta())) {
 				//std::cout << "Teste\n";
-				filaDestinos.push_back(instrucoes[i]); //if fila > 4
-				
+
+				estagios.push_back(instrucoes[i]);
+				filaDestinos.push_back(instrucoes[i++]); //if fila > 4	
 				if (filaDestinos.size() > 4) {
 					filaDestinos.pop_front();
-				}
-
-				estagios.push_back(instrucoes[i++]);
+				}							
 				estagios.pop_front();
 				print();
 				if (wasJump) {
@@ -129,16 +155,15 @@ void Pipeline::gerarPipeline() {
 
 		//Instrução sem conflito
 		//std::cout << "Instrução sem conflito no tempo 0!\n";
-		filaDestinos.push_back(instrucoes[i]); //if fila > 4
-		
-		// Fila de destinos é atualizada.
-		if (filaDestinos.size() > 4) {
-			filaDestinos.pop_front();
-		}
 		
 		// O elemento é inserido imediatamente ao pipeline.
 
-		estagios.push_back(instrucoes[i++]);
+		estagios.push_back(instrucoes[i]);
+		filaDestinos.push_back(instrucoes[i++]); //if fila > 4
+		// Fila de destinos é atualizada.
+		if (filaDestinos.size() > 4) {
+			filaDestinos.pop_front();
+		}		
 		estagios.pop_front();
 		numeroDeCiclos++;
 		print();
@@ -168,33 +193,34 @@ void Pipeline::gerarPipeline() {
 	}
 }
 
-bool Pipeline::hasConflito(Instrucao instrucao) {
-	for (unsigned int k = 0; k < filaDestinos.size(); k++){
+Instrucao Pipeline::hasConflito(Instrucao instrucao) {
+	for (int k = filaDestinos.size()-1; k > -1; k--){
 			//Comparando destino (se não for null)
 			if(filaDestinos.at(k).getDestino() != "null"){
 				if (instrucao.getFonte1() == filaDestinos.at(k).getDestino()){
-									return true;
+						return filaDestinos.at(k);
 				}
 				
 				if (instrucao.getFonte2() != "null") {
 					if (instrucao.getFonte2() == filaDestinos.at(k).getDestino())
-						return true;
+						return filaDestinos.at(k);
 				}
 			}
 			//Comparando destino secundário (se não for null)
 			if(filaDestinos.at(k).getDestinoSecundario() != "null") {
 				if (instrucao.getFonte1() == filaDestinos.at(k).getDestinoSecundario()) {
-					return true;
+					return filaDestinos.at(k);
 				}
 
 				if (instrucao.getFonte2() != "null") {
 					if (instrucao.getFonte2() == filaDestinos.at(k).getDestinoSecundario()) {
-						return true;
+						return filaDestinos.at(k);
 					}
 				}
 			}
 		}
-	return false;
+	Instrucao null;
+	return null;
 }
 
 void Pipeline::print() {

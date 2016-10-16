@@ -25,7 +25,7 @@ public:
 
 	void gerarPipeline();
 
-	bool hasConflito(Instrucao instrucao);
+	Instrucao hasConflito(Instrucao instrucao);
 
 	void print();	
 };

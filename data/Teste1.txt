@@ -6,8 +6,8 @@ mflo $1
 mfhi $1
 div $1, $2
 mul $1, $2
-add $1, $2, 
-4
+add $1, $2, $s3
  
 FINALB: 
+add $1, $2, $s3
 j FIM
