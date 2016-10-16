@@ -25,7 +25,14 @@ void Pipeline::gerarPipeline() {
 
 for (unsigned int i = 0; i < instrucoes.size();) {
 	//std::cout << "\ni = " << i << "\n";
-		for(unsigned int j = 0; j < 5; j++) {
+		for(unsigned int j = 0; j < 1; j++) {
+			// Se a "instrução" for uma label, pula.
+			//std::cout << instrucoes[i].isLabel() << "\n";
+			if (instrucoes[i].isLabel()) {
+				i++;
+				continue;
+			}
+
 			//std::cout << "\nj = " << j << "\n";
 			if (i == 0 and j == 0) {
 				//std::cout << "Primeira instrução!\n";
@@ -38,7 +45,12 @@ for (unsigned int i = 0; i < instrucoes.size();) {
 				print();
 				if (!(i < instrucoes.size())) break;
 				continue;
-			} 
+			}
+
+			// Como foi pulado um label, ela também não pode ser comparada com um elemento atual.
+			int n;
+			if (instrucoes[i-1].isLabel()) n = i-2;
+			else n = i-1;
 
 			if (hasConflito(instrucoes[i])) {
 				if (j == 0) {
@@ -46,7 +58,7 @@ for (unsigned int i = 0; i < instrucoes.size();) {
 					numeroDeCiclos++;
 					//std::cout << "\n" << instrucoes[i-1].getLinhaCompleta() << "\n";
 					//std::cout << estagios[1].getLinhaCompleta() << "\n\n";
-					if (instrucoes[i-1].getLinhaCompleta() == estagios[1].getLinhaCompleta()) {
+					if (instrucoes[n].getLinhaCompleta() == estagios[1].getLinhaCompleta()) {
 					//	std::cout << "Teste\n";
 						filaDestinos.push_back(instrucoes[i]); //if fila > 4
 						if (filaDestinos.size() > 4) filaDestinos.pop_front();
@@ -67,7 +79,7 @@ for (unsigned int i = 0; i < instrucoes.size();) {
 					numeroDeCiclos++;
 					//std::cout << "\n" << instrucoes[i-1].getLinhaCompleta() << "\n";
 					//std::cout << estagios[1].getLinhaCompleta() << "\n\n";
-					if (instrucoes[i-1].getLinhaCompleta() == estagios[1].getLinhaCompleta()) {
+					if (instrucoes[n].getLinhaCompleta() == estagios[1].getLinhaCompleta()) {
 						//std::cout << "Teste\n";
 						filaDestinos.push_back(instrucoes[i]); //if fila > 4
 						if (filaDestinos.size() > 4) filaDestinos.pop_front();
@@ -88,7 +100,7 @@ for (unsigned int i = 0; i < instrucoes.size();) {
 					numeroDeCiclos++;
 					//std::cout << "\n" << instrucoes[i-1].getLinhaCompleta() << "\n";
 					//std::cout << estagios[1].getLinhaCompleta() << "\n\n";
-					if (instrucoes[i-1].getLinhaCompleta() == estagios[1].getLinhaCompleta()) {
+					if (instrucoes[n].getLinhaCompleta() == estagios[1].getLinhaCompleta()) {
 						//std::cout << "Teste\n";
 						filaDestinos.push_back(instrucoes[i]); //if fila > 4
 						if (filaDestinos.size() > 4) filaDestinos.pop_front();
@@ -109,7 +121,7 @@ for (unsigned int i = 0; i < instrucoes.size();) {
 					numeroDeCiclos++;
 					//std::cout << "\n" << instrucoes[i-1].getLinhaCompleta() << "\n";
 					//std::cout << estagios[1].getLinhaCompleta() << "\n\n";
-					if (instrucoes[i-1].getLinhaCompleta() == estagios[1].getLinhaCompleta()) {
+					if (instrucoes[n].getLinhaCompleta() == estagios[1].getLinhaCompleta()) {
 						//std::cout << "Teste\n";
 						filaDestinos.push_back(instrucoes[i]); //if fila > 4
 						if (filaDestinos.size() > 4) filaDestinos.pop_front();
@@ -131,7 +143,7 @@ for (unsigned int i = 0; i < instrucoes.size();) {
 					numeroDeCiclos++;
 					//std::cout << "\n" << instrucoes[i-1].getLinhaCompleta() << "\n";
 					//std::cout << estagios[1].getLinhaCompleta() << "\n\n";
-					if (instrucoes[i-1].getLinhaCompleta() == estagios[1].getLinhaCompleta()) {
+					if (instrucoes[n].getLinhaCompleta() == estagios[1].getLinhaCompleta()) {
 						//std::cout << "Teste\n";
 						filaDestinos.push_back(instrucoes[i]); //if fila > 4
 						if (filaDestinos.size() > 4) filaDestinos.pop_front();
