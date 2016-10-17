@@ -26,5 +26,6 @@ Um exemplo de execução é:
 
 #Thanks
 
-- Yuri Alessandro (github.com/YuriAlessandro);
-- Yuri Reinaldo (github.com/Yuri-wrlk).
+- Yuri Alessandro (makefile, projeto passado, relatório), github.com/YuriAlessandro;
+- Yuri Reinaldo (projeto passado), github.com/Yuri-wrlk;
+- Elton Viana (makefile), github.com/eltonvs.
