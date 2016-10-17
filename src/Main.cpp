@@ -45,11 +45,9 @@ int main(int argc, char * argv[]) {
         std::cout << ">>> Input file wasn't found. Try again.\n";
     }
 
-    for (unsigned int i = 0; i < p.getNumeroDeInstrucoes(); ++i) {
-      std::cout << p.getElemento(i).getNome() << "\n";
-    }
-
     p.gerarPipeline();
+    std::cout << "\n-----------------------------------------------------\n";
+    std::cout << "\nTotal de ciclos: " << p.getNumeroDeCiclos() << "\n";
 
     return 0;
 }

@@ -27,7 +27,9 @@ public:
 
 	Instrucao hasConflito(Instrucao instrucao);
 
-	void print();	
+	void print();
+
+	unsigned int getNumeroDeCiclos();
 };
 
 #endif

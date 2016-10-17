@@ -18,6 +18,10 @@ unsigned int Pipeline::getNumeroDeInstrucoes() {
 	return this->numeroDeInstrucoes;
 }
 
+unsigned int Pipeline::getNumeroDeCiclos() {
+	return this->numeroDeCiclos;
+}
+
 void Pipeline::gerarPipeline() {
 	Instrucao null;
 	numeroDeCiclos = 0;
@@ -56,11 +60,11 @@ void Pipeline::gerarPipeline() {
 				//std::cout << instrucoes[nextAfterJump].getNome() << "\n";
 				//std::cout << instrucoes[j].getLabel().compare (instrucoes[nextAfterJump].getNome()) << "\n";
 				nextAfterJump++;
-				std::cout << instrucoes[nextAfterJump].getNome();
+				//std::cout << instrucoes[nextAfterJump].getNome();
 			}
 
 			if (nextAfterJump == instrucoes.size()) {
-				std::cout << "Há um jump no código cujo label não foi encontrada!\n";
+				std::cout << "\nHá um jumper no código cujo label não foi encontrada!\n";
 				break;
 			}
 			wasJump = true;
@@ -105,9 +109,9 @@ void Pipeline::gerarPipeline() {
 		
 		//Se o elemento a ser inserido tiver conflito com o atual, retornará o conflito (e o nome será diferente de "null").
 		if (conflitante.getNome() != "null") {	
-			std::cout << "\n" << conflitante.getLinhaCompleta() << "\n";
-			std::cout << estagios[1].getLinhaCompleta() << "\n";
-			std::cout << estagios[0].getLinhaCompleta() << "\n";
+			//std::cout << "\n" << conflitante.getLinhaCompleta() << "\n";
+			//std::cout << estagios[1].getLinhaCompleta() << "\n";
+			//std::cout << estagios[0].getLinhaCompleta() << "\n";
 			//std::cout << "Instrução com conflito e no tempo 0.\n";
 			numeroDeCiclos++;
 			//std::cout << "\n" << instrucoes[i-1].getLinhaCompleta() << "\n";
@@ -177,7 +181,7 @@ void Pipeline::gerarPipeline() {
 	for (unsigned int i; ; i++) {
 		estagios.push_back(null);
 		estagios.pop_front();
-		std::cout << estagios.size() << std::endl;
+		//std::cout << estagios.size() << std::endl;
 		
 		//Só para quando todas as linhas forem vazias.
 		if (estagios[4].getLinhaCompleta() == "null" and 
@@ -228,10 +232,11 @@ Instrucao Pipeline::hasConflito(Instrucao instrucao) {
 }
 
 void Pipeline::print() {
+		std::cout << "\n-----------------------------------------------------\n";
 		std::cout << "\nCiclo " << numeroDeCiclos << "\n";
-		std::cout << estagios.at(4).getLinhaCompleta() << "\n";
-		std::cout << estagios.at(3).getLinhaCompleta() << "\n";
-		std::cout << estagios.at(2).getLinhaCompleta() << "\n";
-		std::cout << estagios.at(1).getLinhaCompleta() << "\n";
-		std::cout << estagios.at(0).getLinhaCompleta() << "\n";
+		std::cout << "BI:	" << estagios.at(4).getLinhaCompleta() << "\n";
+		std::cout << "DI:	" << estagios.at(3).getLinhaCompleta() << "\n";
+		std::cout << "EX:	" << estagios.at(2).getLinhaCompleta() << "\n";
+		std::cout << "MEM:	" << estagios.at(1).getLinhaCompleta() << "\n";
+		std::cout << "WB:	" << estagios.at(0).getLinhaCompleta() << "\n";
 }
