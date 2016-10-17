@@ -40,7 +40,7 @@ void Instrucao::separarEValidarString() {
 	}
 
 	// DIV | MUL
-	else if (v[0] == "div" or v[0] == "mult") {
+	else if (v[0] == "div" or v[0] == "mult" or v[0] == "mul") {
 		if (v.size() < 3) {
 			this->linhaValida = false;
 			std::cout << "Instrução \"" << linhaCompleta << "\" incorreta. Ela não será considerada na simulação.\n";

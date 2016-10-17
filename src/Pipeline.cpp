@@ -118,22 +118,22 @@ void Pipeline::gerarPipeline() {
 			//E caso o elemento conflitante não esteja no índice 1 do deque, é conferido o elemento 0.
 			//Pois pode ser que tenha acontecido de um lw estar no estagios[2] e o código tenha pulado um índice, sendo assim, o elemento conflitante ficando no estagios[0].
 			//Também é conferido se o elemento conflitante não está nos elementos 4, 3, e 2 do deque, pois pode ser que haja instruções iguais repetidas. Ou seja, não é a hora de inserir uma instrução com conflito.
-			//Também é conferido se o elemento conflitante não está mais no pipeline.
-			if (((instrucoes[n].getLinhaCompleta() == estagios[1].getLinhaCompleta() 
-				or conflitante.getLinhaCompleta() == estagios[0].getLinhaCompleta()) 
-				and conflitante.getLinhaCompleta() != estagios[4].getLinhaCompleta() 
-				and conflitante.getLinhaCompleta() != estagios[3].getLinhaCompleta() 
-				and conflitante.getLinhaCompleta() != estagios[2].getLinhaCompleta()) or 
+			//Também é conferido se o elemento conflitante não está mais no processo de pipeline.
+			
+			if (((instrucoes[n].getLinhaCompleta() == estagios[1].getLinhaCompleta() or 
+				conflitante.getLinhaCompleta() == estagios[0].getLinhaCompleta()) 	 and 
+				conflitante.getLinhaCompleta() != estagios[4].getLinhaCompleta() 	 and 
+				conflitante.getLinhaCompleta() != estagios[3].getLinhaCompleta() 	 and 
+				conflitante.getLinhaCompleta() != estagios[2].getLinhaCompleta()) 	 or 
 
-				(conflitante.getLinhaCompleta() != estagios[4].getLinhaCompleta() and
-				conflitante.getLinhaCompleta() != estagios[3].getLinhaCompleta() and
-				conflitante.getLinhaCompleta() != estagios[2].getLinhaCompleta() and 
-				conflitante.getLinhaCompleta() != estagios[1].getLinhaCompleta() and
+				(conflitante.getLinhaCompleta() != estagios[4].getLinhaCompleta() 	 and
+				conflitante.getLinhaCompleta() != estagios[3].getLinhaCompleta() 	 and
+				conflitante.getLinhaCompleta() != estagios[2].getLinhaCompleta() 	 and 
+				conflitante.getLinhaCompleta() != estagios[1].getLinhaCompleta()  	 and
 				conflitante.getLinhaCompleta() != estagios[0].getLinhaCompleta())) {
-				//std::cout << "Teste\n";
 
 				estagios.push_back(instrucoes[i]);
-				filaDestinos.push_back(instrucoes[i++]); //if fila > 4	
+				filaDestinos.push_back(instrucoes[i++]);
 				if (filaDestinos.size() > 4) {
 					filaDestinos.pop_front();
 				}							
@@ -154,12 +154,11 @@ void Pipeline::gerarPipeline() {
 		}
 
 		//Instrução sem conflito
-		//std::cout << "Instrução sem conflito no tempo 0!\n";
-		
-		// O elemento é inserido imediatamente ao pipeline.
+		//O elemento é inserido imediatamente ao pipeline.
 
 		estagios.push_back(instrucoes[i]);
 		filaDestinos.push_back(instrucoes[i++]); //if fila > 4
+		
 		// Fila de destinos é atualizada.
 		if (filaDestinos.size() > 4) {
 			filaDestinos.pop_front();
@@ -179,6 +178,7 @@ void Pipeline::gerarPipeline() {
 		estagios.push_back(null);
 		estagios.pop_front();
 		std::cout << estagios.size() << std::endl;
+		
 		//Só para quando todas as linhas forem vazias.
 		if (estagios[4].getLinhaCompleta() == "null" and 
 			estagios[3].getLinhaCompleta() == "null" and 
@@ -197,8 +197,10 @@ Instrucao Pipeline::hasConflito(Instrucao instrucao) {
 	for (int k = filaDestinos.size()-1; k > -1; k--){
 			//Comparando destino (se não for null)
 			if(filaDestinos.at(k).getDestino() != "null"){
-				if (instrucao.getFonte1() == filaDestinos.at(k).getDestino()){
-						return filaDestinos.at(k);
+				if (instrucao.getFonte1() != "null") {
+					if (instrucao.getFonte1() == filaDestinos.at(k).getDestino()){
+							return filaDestinos.at(k);
+					}
 				}
 				
 				if (instrucao.getFonte2() != "null") {
@@ -208,8 +210,10 @@ Instrucao Pipeline::hasConflito(Instrucao instrucao) {
 			}
 			//Comparando destino secundário (se não for null)
 			if(filaDestinos.at(k).getDestinoSecundario() != "null") {
-				if (instrucao.getFonte1() == filaDestinos.at(k).getDestinoSecundario()) {
-					return filaDestinos.at(k);
+				if (instrucao.getFonte1() != "null") {
+					if (instrucao.getFonte1() == filaDestinos.at(k).getDestinoSecundario()) {
+						return filaDestinos.at(k);
+					}
 				}
 
 				if (instrucao.getFonte2() != "null") {
