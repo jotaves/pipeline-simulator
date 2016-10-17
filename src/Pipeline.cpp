@@ -1,17 +1,57 @@
 #include <Pipeline.h>
 
-Pipeline::Pipeline () : numeroDeInstrucoes(0) {
+Instrucao Pipeline::hasConflito(Instrucao instrucao) {
+	for (int k = filaDestinos.size()-1; k > -1; k--){
+			//Comparando destino (se não for null)
+			if(filaDestinos.at(k).getDestino() != "null"){
+				if (instrucao.getFonte1() != "null") {
+					if (instrucao.getFonte1() == filaDestinos.at(k).getDestino()){
+							return filaDestinos.at(k);
+					}
+				}
+				
+				if (instrucao.getFonte2() != "null") {
+					if (instrucao.getFonte2() == filaDestinos.at(k).getDestino())
+						return filaDestinos.at(k);
+				}
+			}
+			//Comparando destino secundário (se não for null)
+			if(filaDestinos.at(k).getDestinoSecundario() != "null") {
+				if (instrucao.getFonte1() != "null") {
+					if (instrucao.getFonte1() == filaDestinos.at(k).getDestinoSecundario()) {
+						return filaDestinos.at(k);
+					}
+				}
+
+				if (instrucao.getFonte2() != "null") {
+					if (instrucao.getFonte2() == filaDestinos.at(k).getDestinoSecundario()) {
+						return filaDestinos.at(k);
+					}
+				}
+			}
+		}
+	Instrucao null;
+	return null;
+}
+
+void Pipeline::print() {
+		std::cout << "\n-----------------------------------------------------\n";
+		std::cout << "\nCiclo " << numeroDeCiclos << "\n";
+		std::cout << "BI:	" << estagios.at(4).getLinhaCompleta() << "\n";
+		std::cout << "DI:	" << estagios.at(3).getLinhaCompleta() << "\n";
+		std::cout << "EX:	" << estagios.at(2).getLinhaCompleta() << "\n";
+		std::cout << "MEM:	" << estagios.at(1).getLinhaCompleta() << "\n";
+		std::cout << "WB:	" << estagios.at(0).getLinhaCompleta() << "\n";
+}
+
+Pipeline::Pipeline () : numeroDeInstrucoes(0), numeroDeCiclos(0) {
 }
 
 void Pipeline::addInstrucao(Instrucao instrucao) {
 	if(instrucao.isValida()) {
 		instrucoes.push_back(instrucao);
-		numeroDeInstrucoes++;
+		if (!instrucao.isLabel()) numeroDeInstrucoes++;
 	}
-}
-
-Instrucao Pipeline::getElemento (unsigned int i) {
-	return this->instrucoes[i];
 }
 
 unsigned int Pipeline::getNumeroDeInstrucoes() {
@@ -24,7 +64,6 @@ unsigned int Pipeline::getNumeroDeCiclos() {
 
 void Pipeline::gerarPipeline() {
 	Instrucao null;
-	numeroDeCiclos = 0;
 	estagios.assign(5, null);
 	bool wasJump = false;
 	unsigned int nextAfterJump;
@@ -195,48 +234,4 @@ void Pipeline::gerarPipeline() {
 		numeroDeCiclos++;
 		print();
 	}
-}
-
-Instrucao Pipeline::hasConflito(Instrucao instrucao) {
-	for (int k = filaDestinos.size()-1; k > -1; k--){
-			//Comparando destino (se não for null)
-			if(filaDestinos.at(k).getDestino() != "null"){
-				if (instrucao.getFonte1() != "null") {
-					if (instrucao.getFonte1() == filaDestinos.at(k).getDestino()){
-							return filaDestinos.at(k);
-					}
-				}
-				
-				if (instrucao.getFonte2() != "null") {
-					if (instrucao.getFonte2() == filaDestinos.at(k).getDestino())
-						return filaDestinos.at(k);
-				}
-			}
-			//Comparando destino secundário (se não for null)
-			if(filaDestinos.at(k).getDestinoSecundario() != "null") {
-				if (instrucao.getFonte1() != "null") {
-					if (instrucao.getFonte1() == filaDestinos.at(k).getDestinoSecundario()) {
-						return filaDestinos.at(k);
-					}
-				}
-
-				if (instrucao.getFonte2() != "null") {
-					if (instrucao.getFonte2() == filaDestinos.at(k).getDestinoSecundario()) {
-						return filaDestinos.at(k);
-					}
-				}
-			}
-		}
-	Instrucao null;
-	return null;
-}
-
-void Pipeline::print() {
-		std::cout << "\n-----------------------------------------------------\n";
-		std::cout << "\nCiclo " << numeroDeCiclos << "\n";
-		std::cout << "BI:	" << estagios.at(4).getLinhaCompleta() << "\n";
-		std::cout << "DI:	" << estagios.at(3).getLinhaCompleta() << "\n";
-		std::cout << "EX:	" << estagios.at(2).getLinhaCompleta() << "\n";
-		std::cout << "MEM:	" << estagios.at(1).getLinhaCompleta() << "\n";
-		std::cout << "WB:	" << estagios.at(0).getLinhaCompleta() << "\n";
 }

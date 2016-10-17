@@ -14,22 +14,15 @@ private:
 	unsigned int numeroDeInstrucoes;
 	unsigned int numeroDeCiclos;
 
+	Instrucao hasConflito(Instrucao instrucao);
+	void print();	
+
 public:
 	Pipeline ();
-
-	Instrucao getElemento (unsigned int i);
-
 	void addInstrucao(Instrucao instrucao);
-
 	unsigned int getNumeroDeInstrucoes();
-
-	void gerarPipeline();
-
-	Instrucao hasConflito(Instrucao instrucao);
-
-	void print();
-
 	unsigned int getNumeroDeCiclos();
+	void gerarPipeline();
 };
 
 #endif

@@ -51,4 +51,32 @@ clean:
 	@echo "Cleaning..."
 	@echo " $(RM) -r $(OBJS) $(TARGET)"; $(RM) -r $(OBJS) $(TARGET)
 
+test1:
+	@echo "Starting Test 1..."
+	./bin/pipeline-simulator data/Teste1.txt
+
+test2:
+	@echo "Starting Test 2..."
+	./bin/pipeline-simulator data/Teste2.txt
+
+test3:
+	@echo "Starting Test 3..."
+	./bin/pipeline-simulator data/Teste3.txt
+
+test4:
+	@echo "Starting Test 4..."
+	./bin/pipeline-simulator data/Teste4.txt
+
+test5:
+	@echo "Starting Test 5..."
+	./bin/pipeline-simulator data/Teste5.txt
+
+test6:
+	@echo "Starting Test 6..."
+	./bin/pipeline-simulator data/Teste6.txt
+
+test7:
+	@echo "Starting Test 7..."
+	./bin/pipeline-simulator data/Teste7.txt
+
 .PHONY: clean

@@ -23,27 +23,16 @@ private:
 
 public:
 	Instrucao ();
-
 	Instrucao (std::string linhaCompleta);
-
 	std::string getLinhaCompleta();
-
 	std::string getNome();
-
 	std::string getDestino();
-
 	std::string getDestinoSecundario();
-
 	std::string getFonte1();
-
 	std::string getFonte2();
-
 	std::string getLabel();
-
 	std::string getValor();
-
 	bool isValida();
-
 	bool isLabel();
 };
 
