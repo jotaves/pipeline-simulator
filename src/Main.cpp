@@ -48,6 +48,7 @@ int main(int argc, char * argv[]) {
     p.gerarPipeline();
     std::cout << "\n-----------------------------------------------------\n";
     std::cout << "\nTotal de ciclos: " << p.getNumeroDeCiclos() << "\n";
+    std::cout << "Número de instruções usadas: " << p.getNumeroDeInstrucoes() << "\n";
 
     return 0;
 }

@@ -24,6 +24,16 @@ Um exemplo de execução é:
 
 `./bin/pipeline-simulator data/Teste2.txt`
 
+Para visualizar os testes que foram executados, basta usar o comando:
+
+`make testN`
+
+com 1 <= N <= 7.
+
+Exemplo:
+
+`make test1`
+
 #Thanks
 
 - Yuri Alessandro (makefile, projeto passado, relatório), github.com/YuriAlessandro;

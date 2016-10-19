@@ -133,20 +133,12 @@ void Pipeline::gerarPipeline() {
 			continue;
 		}
 
-		//Como foi pulado um label, ela também não pode ser comparada com um elemento atual.
-		//Então, se uma label é o elemento anterior, é necessário pegar o elemento anterior à label.
-		int n;
-		if (instrucoes[i-1].isLabel()) {
-			n = i-2;
-		}
-		else {
-			n = i-1;
-		}
-
-		//Procura se há conflito e passa o retorno pra uma instrução auxiliar.
+		//hasConflito() procura se há conflito e passa o retorno pra uma Instrução auxiliar.
 		Instrucao conflitante = hasConflito(instrucoes[i]);
 		
-		//Se o elemento a ser inserido tiver conflito com o atual, retornará o conflito (e o nome será diferente de "null").
+		//Se o elemento a ser inserido tiver conflito com o atual, hasConflito() retornará uma Instrução. Caso não haja conflito, a função retorna
+		// uma Instrução "null" (ou seja, se houver conflito, o nome da instrução retornada terá o nome diferente de "null").
+		
 		if (conflitante.getNome() != "null") {	
 			//std::cout << "\n" << conflitante.getLinhaCompleta() << "\n";
 			//std::cout << estagios[1].getLinhaCompleta() << "\n";
@@ -156,24 +148,17 @@ void Pipeline::gerarPipeline() {
 			//std::cout << "\n" << instrucoes[i-1].getLinhaCompleta() << "\n";
 			//std::cout << estagios[1].getLinhaCompleta() << "\n\n";
 			
-			//Se o elemento conflitante estiver na fase "EX" do pipeline. O novo será inserido.
-			//Por causa de peculiaridades do código, é conferido o elemento 1 do deque, pois o elemento inserido agora só aparecerá na próxima impressão.
-			//E caso o elemento conflitante não esteja no índice 1 do deque, é conferido o elemento 0.
-			//Pois pode ser que tenha acontecido de um lw estar no estagios[2] e o código tenha pulado um índice, sendo assim, o elemento conflitante ficando no estagios[0].
-			//Também é conferido se o elemento conflitante não está nos elementos 4, 3, e 2 do deque, pois pode ser que haja instruções iguais repetidas. Ou seja, não é a hora de inserir uma instrução com conflito.
-			//Também é conferido se o elemento conflitante não está mais no processo de pipeline.
-			
-			if (((instrucoes[n].getLinhaCompleta() == estagios[1].getLinhaCompleta() or 
-				conflitante.getLinhaCompleta() == estagios[0].getLinhaCompleta()) 	 and 
-				conflitante.getLinhaCompleta() != estagios[4].getLinhaCompleta() 	 and 
-				conflitante.getLinhaCompleta() != estagios[3].getLinhaCompleta() 	 and 
-				conflitante.getLinhaCompleta() != estagios[2].getLinhaCompleta()) 	 or 
-
-				(conflitante.getLinhaCompleta() != estagios[4].getLinhaCompleta() 	 and
+			/*
+				Se o elemento conflitante não estiver nos estágios 4, 3 e 2 do código, é inserido um novo elemento. Caso haja conflito, é avançado uma fase do pipeline.
+				Por peculiaridades do código, não estar nos estágios 4, 3 e 2 significa:
+					- Pode estar no 1: que é quando o elemento será inserido. Quando for inserido, o elemento conflitante estará na posição 0. Logo, o Pipeline
+				imprimirá corretamente.
+					- Pode estar no 0: isso pode ser possível devido à função lw, que pula um estágio sempre que há um lw no estágio 2.
+					- Apesar de estar na lista de conflitos, o elemento não está mais dentro do processamento do pipeline. Ou seja, não está no vetor "estagios".
+			*/
+			if (conflitante.getLinhaCompleta() != estagios[4].getLinhaCompleta() 	 and
 				conflitante.getLinhaCompleta() != estagios[3].getLinhaCompleta() 	 and
-				conflitante.getLinhaCompleta() != estagios[2].getLinhaCompleta() 	 and 
-				conflitante.getLinhaCompleta() != estagios[1].getLinhaCompleta()  	 and
-				conflitante.getLinhaCompleta() != estagios[0].getLinhaCompleta())) {
+				conflitante.getLinhaCompleta() != estagios[2].getLinhaCompleta()) {
 
 				estagios.push_back(instrucoes[i]);
 				filaDestinos.push_back(instrucoes[i++]);
@@ -189,7 +174,7 @@ void Pipeline::gerarPipeline() {
 				continue;
 			}
 
-			//Se ele não estiver no último estágio, é avançado um estágio do pipeline.
+			//Avançando um estágio do pipeline.
 			estagios.push_back(null);
 			estagios.pop_front();
 			print();
