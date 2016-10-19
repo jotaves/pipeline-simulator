@@ -34,7 +34,7 @@ Exemplo:
 
 `make test1`
 
-#Thanks
+# Thanks
 
 - Yuri Alessandro (makefile, projeto passado, relatório), github.com/YuriAlessandro;
 - Yuri Reinaldo (projeto passado), github.com/Yuri-wrlk;
