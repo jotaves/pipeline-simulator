@@ -1,5 +1,7 @@
 # Pipeline Simulator
 
+Por João Victor Bezerra Barboza.
+
 Simulador de Pipeline produzido como um projeto da disciplina Introdução à Organização e Arquitetura de Computadores (2016.2).
 
 # Funcionamento
@@ -36,6 +38,10 @@ Exemplo:
 
 # Thanks
 
-- Yuri Alessandro (makefile, projeto passado, relatório), github.com/YuriAlessandro;
+- Yuri Alessandro (makefile, projeto passado), github.com/YuriAlessandro;
 - Yuri Reinaldo (projeto passado), github.com/Yuri-wrlk;
 - Elton Viana (makefile), github.com/eltonvs.
+
+# GitHub
+
+O projeto pode ser visto em github.com/jotaves/pipeline-simulator.
