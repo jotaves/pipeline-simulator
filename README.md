@@ -36,6 +36,6 @@ Exemplo:
 
 # Thanks
 
-- Yuri Alessandro (makefile, projeto passado, relatório), github.com/YuriAlessandro;
+- Yuri Alessandro (makefile, projeto passado), github.com/YuriAlessandro;
 - Yuri Reinaldo (projeto passado), github.com/Yuri-wrlk;
 - Elton Viana (makefile), github.com/eltonvs.
